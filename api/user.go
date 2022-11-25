@@ -127,10 +127,10 @@ func PassWordLogin(c *gin.Context) {
 		HandleValidatorError(c, err)
 		return
 	}
-	zap.S().Info("PassWordLogin CaptchaId = %s, Captcha = %s", passwordLoginForm.CaptchaId, passwordLoginForm.Captcha)
+	zap.S().Infof("PassWordLogin CaptchaId = %s, Captcha = %s", passwordLoginForm.CaptchaId, passwordLoginForm.Captcha)
 	value := store.Get(passwordLoginForm.CaptchaId, false)
-	zap.S().Info("PassWordLogin CaptchaId = %s, value = %s", passwordLoginForm.CaptchaId, value)
-	if store.Verify(passwordLoginForm.CaptchaId, passwordLoginForm.Captcha, true) {
+	zap.S().Infof("PassWordLogin CaptchaId = %s, value = %s", passwordLoginForm.CaptchaId, value)
+	if !store.Verify(passwordLoginForm.CaptchaId, passwordLoginForm.Captcha, true) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"captcha": "验证码错误",
 		})
