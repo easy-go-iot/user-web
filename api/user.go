@@ -141,6 +141,7 @@ func PassWordLogin(c *gin.Context) {
 	if rsp, err := global.UserSrvClient.GetUserByMobile(context.Background(), &proto.MobilerRequest{
 		Mobile: passwordLoginForm.Mobile,
 	}); err != nil {
+		zap.S().Error(err)
 		if e, ok := status.FromError(err); ok {
 			switch e.Code() {
 			case codes.NotFound:
