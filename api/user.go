@@ -77,6 +77,7 @@ func HandleValidatorError(c *gin.Context, err error) {
 }
 
 func GetUserList(ctx *gin.Context) {
+	zap.S().Info("GetUserList here")
 	//拨号连接用户grpc服务器 跨域的问题 - 后端解决 也可以前端来解决
 	claims, _ := ctx.Get("claims")
 	currentUser := claims.(*models.CustomClaims)
@@ -119,6 +120,7 @@ func GetUserList(ctx *gin.Context) {
 }
 
 func PassWordLogin(c *gin.Context) {
+	zap.S().Info("PassWordLogin here")
 	//表单验证
 	passwordLoginForm := forms.PassWordLoginForm{}
 	if err := c.ShouldBind(&passwordLoginForm); err != nil {
@@ -197,6 +199,7 @@ func PassWordLogin(c *gin.Context) {
 }
 
 func Register(c *gin.Context) {
+	zap.S().Info("Register here")
 	//用户注册
 	registerForm := forms.RegisterForm{}
 	if err := c.ShouldBind(&registerForm); err != nil {
@@ -263,6 +266,7 @@ func Register(c *gin.Context) {
 }
 
 func GetUserDetail(ctx *gin.Context) {
+	zap.S().Info("GetUserDetail here")
 	claims, _ := ctx.Get("claims")
 	currentUser := claims.(*models.CustomClaims)
 	zap.S().Infof("访问用户: %d", currentUser.ID)
@@ -283,6 +287,7 @@ func GetUserDetail(ctx *gin.Context) {
 }
 
 func UpdateUser(ctx *gin.Context) {
+	zap.S().Info("UpdateUser here")
 	updateUserForm := forms.UpdateUserForm{}
 	if err := ctx.ShouldBind(&updateUserForm); err != nil {
 		HandleValidatorError(ctx, err)

@@ -4,6 +4,7 @@ import (
 	"context"
 	"easy-go-iot/user-web/forms"
 	"fmt"
+	"go.uber.org/zap"
 	"math/rand"
 	"net/http"
 	"strings"
@@ -31,6 +32,7 @@ func GenerateSmsCode(witdh int) string {
 }
 
 func SendSms(ctx *gin.Context) {
+	zap.S().Info("SendSms here")
 	sendSmsForm := forms.SendSmsForm{}
 	if err := ctx.ShouldBind(&sendSmsForm); err != nil {
 		HandleValidatorError(ctx, err)
