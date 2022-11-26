@@ -1,20 +1,15 @@
 package main
 
 import (
-	"context"
-	proto "easy-go-iot/user-web/proto"
 	"fmt"
-	"google.golang.org/grpc"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
-
 	"github.com/gin-gonic/gin/binding"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"easy-go-iot/user-web/global"
 	"easy-go-iot/user-web/initialize"
@@ -59,42 +54,6 @@ func main() {
 	if err := Router.Run(fmt.Sprintf(":%d", global.ServerConfig.Port)); err != nil {
 		zap.S().Panic("启动失败:", err.Error())
 	}
-
-	go func() {
-		time.Sleep(120 * time.Second)
-		userConn, err := grpc.Dial(
-			fmt.Sprintf("%s:%d", "userrpc-service", 50001),
-			grpc.WithInsecure())
-		if err != nil {
-			zap.S().Fatal("[InitSrvConn] 连接 【用户服务失败】")
-		}
-		userClient := proto.NewUserClient(userConn)
-		rsp, err := userClient.GetUserById(context.Background(), &proto.IdRequest{
-			Id: int32(1),
-		})
-		if err != nil {
-			zap.S().Error(err)
-		}
-		zap.S().Info(rsp.Mobile, rsp.NickName, rsp.Password)
-	}()
-
-	go func() {
-		time.Sleep(130 * time.Second)
-		userConn, err := grpc.Dial(
-			fmt.Sprintf("%s:%d", global.ServerConfig.UserSrvInfo.Host, global.ServerConfig.UserSrvInfo.Port),
-			grpc.WithInsecure())
-		if err != nil {
-			zap.S().Fatal("[InitSrvConn] 连接 【用户服务失败】")
-		}
-		userClient := proto.NewUserClient(userConn)
-		rsp, err := userClient.GetUserById(context.Background(), &proto.IdRequest{
-			Id: int32(1),
-		})
-		if err != nil {
-			zap.S().Error(err)
-		}
-		zap.S().Info(rsp.Mobile, rsp.NickName, rsp.Password)
-	}()
 
 	//接收终止信号
 	quit := make(chan os.Signal)
