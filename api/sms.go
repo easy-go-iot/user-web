@@ -71,7 +71,12 @@ func SendSms(ctx *gin.Context) {
 	rdb := redis.NewClient(&redis.Options{
 		Addr: fmt.Sprintf("%s:%d", global.ServerConfig.RedisInfo.Host, global.ServerConfig.RedisInfo.Port),
 	})
-	rdb.Set(context.Background(), sendSmsForm.Mobile, smsCode, time.Duration(global.ServerConfig.RedisInfo.Expire)*time.Second)
+	cmd := rdb.Set(context.Background(), sendSmsForm.Mobile, smsCode, time.Duration(global.ServerConfig.RedisInfo.Expire)*time.Second)
+	result, err := cmd.Result()
+	if err != nil {
+		zap.S().Error(err)
+	}
+	zap.S().Info(result)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"msg": "发送成功",
