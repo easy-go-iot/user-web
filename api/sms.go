@@ -71,6 +71,7 @@ func SendSms(ctx *gin.Context) {
 	rdb := redis.NewClient(&redis.Options{
 		Addr: fmt.Sprintf("%s:%d", global.ServerConfig.RedisInfo.Host, global.ServerConfig.RedisInfo.Port),
 	})
+	zap.S().Infof("redis key %s", sendSmsForm.Mobile)
 	cmd := rdb.Set(context.Background(), sendSmsForm.Mobile, smsCode, time.Duration(global.ServerConfig.RedisInfo.Expire)*time.Second)
 	result, err := cmd.Result()
 	if err != nil {
