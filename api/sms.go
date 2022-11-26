@@ -62,9 +62,10 @@ func SendSms(ctx *gin.Context) {
 	request.QueryParams["TemplateCode"] = global.ServerConfig.AliSmsInfo.TemplateCode //阿里云的短信模板号 自己设置
 	request.QueryParams["TemplateParam"] = "{\"code\":" + smsCode + "}"               //短信模板中的验证码内容 自己生成   之前试过直接返回，但是失败，加上code成功。
 	response, err := client.ProcessCommonRequest(request)
-	fmt.Print(client.DoAction(request, response))
+	zap.S().Info(response)
+	zap.S().Info(client.DoAction(request, response))
 	if err != nil {
-		fmt.Print(err.Error())
+		zap.S().Error(err)
 	}
 	//将验证码保存起来 - redis
 	rdb := redis.NewClient(&redis.Options{
