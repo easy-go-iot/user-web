@@ -61,7 +61,7 @@ func main() {
 	}
 
 	go func() {
-		time.Sleep(10 * time.Second)
+		time.Sleep(120 * time.Second)
 		userConn, err := grpc.Dial(
 			fmt.Sprintf("%s:%d", "userrpc-service", 50001),
 			grpc.WithInsecure())
@@ -79,7 +79,7 @@ func main() {
 	}()
 
 	go func() {
-		time.Sleep(20 * time.Second)
+		time.Sleep(130 * time.Second)
 		userConn, err := grpc.Dial(
 			fmt.Sprintf("%s:%d", global.ServerConfig.UserSrvInfo.Host, global.ServerConfig.UserSrvInfo.Port),
 			grpc.WithInsecure())
